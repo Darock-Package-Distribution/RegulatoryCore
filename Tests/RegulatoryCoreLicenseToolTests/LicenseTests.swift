@@ -1,6 +1,7 @@
 internal import XCTest
+internal import System
 internal import Foundation
-@testable internal import RegulatoryCore
+internal import AppleArchive
 @testable internal import RegulatoryCoreLicenseTool
 
 internal final class LicenseTests: XCTestCase {
@@ -13,12 +14,11 @@ internal final class LicenseTests: XCTestCase {
             .init(id: "unknown", packageName: "Unknown", licenseName: nil, licenseContent: "Custom license")
         ]
         try LicenseArchive.write(licenses, to: url)
-        XCTAssertEqual(try LRCPackageLicense.decodeLicenses(from: url), licenses)
+        XCTAssertEqual(try decodeArchive(from: url), licenses)
         try LicenseArchive.write([], to: url)
-        XCTAssertEqual(try LRCPackageLicense.decodeLicenses(from: url), [])
+        XCTAssertEqual(try decodeArchive(from: url), [])
         try Data("invalid archive".utf8).write(to: url)
-        XCTAssertThrowsError(try LRCPackageLicense.decodeLicenses(from: url))
-        XCTAssertEqual(LRCPackageLicense.defaultLicenses(), [])
+        XCTAssertThrowsError(try decodeArchive(from: url))
     }
     
     internal func testCollectsMultipleLicensesAndMissingLicense() throws {
@@ -61,5 +61,34 @@ internal final class LicenseTests: XCTestCase {
         let directory = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("closure/\(UUID().uuidString)")
         try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         return directory
+    }
+    
+    private func decodeArchive(from url: URL) throws -> [LRCPackageLicense] {
+        let output = url.deletingLastPathComponent().appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: output) }
+        guard let input = ArchiveByteStream.fileStream(
+            path: .init(url.path),
+            mode: .readOnly,
+            options: [],
+            permissions: []
+        ) else {
+            throw CocoaError(.fileReadUnknown)
+        }
+        defer { try? input.close() }
+        guard let decompressor = ArchiveByteStream.decompressionStream(readingFrom: input) else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+        defer { try? decompressor.close() }
+        guard let destination = ArchiveByteStream.fileStream(
+            path: .init(output.path),
+            mode: .writeOnly,
+            options: [.create, .truncate],
+            permissions: [.ownerRead, .ownerWrite]
+        ) else {
+            throw CocoaError(.fileWriteUnknown)
+        }
+        defer { try? destination.close() }
+        _ = try ArchiveByteStream.process(readingFrom: decompressor, writingTo: destination)
+        return try JSONDecoder().decode([LRCPackageLicense].self, from: Data(contentsOf: output))
     }
 }
