@@ -8,14 +8,18 @@ internal import XcodeProjectPlugin
 internal struct RegulatoryCoreLicensePlugin: BuildToolPlugin {
     internal func createBuildCommands(context: PluginContext, target: Target) throws -> [Command] {
         var packages: [String: PackageInput] = [:]
+        var visited = Set<String>()
         func visit(_ package: Package) {
-            guard packages[package.id] == nil else { return }
+            guard visited.insert(package.id).inserted else { return }
+            package.dependencies.forEach { visit($0.package) }
+            if case .repository(let url, _, _) = package.origin, isExcludedRepository(url) {
+                return
+            }
             packages[package.id] = .init(
                 id: package.id,
                 name: package.displayName,
                 directory: package.directoryURL.path
             )
-            package.dependencies.forEach { visit($0.package) }
         }
         context.package.dependencies.forEach { visit($0.package) }
         return try commands(
@@ -23,6 +27,21 @@ internal struct RegulatoryCoreLicensePlugin: BuildToolPlugin {
             tool: context.tool(named: "RegulatoryCoreLicenseTool").url,
             workDirectory: context.pluginWorkDirectoryURL
         )
+    }
+    
+    private func isExcludedRepository(_ location: String) -> Bool {
+        let location = location.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(
+                of: "git@github.com:",
+                with: "https://github.com/",
+                options: [.anchored, .caseInsensitive]
+            )
+        guard let url = URL(string: location),
+              url.host?.lowercased() == "github.com",
+              let owner = url.path.split(separator: "/").first?.lowercased() else {
+            return false
+        }
+        return ["darock-package-distribution", "darock-studio"].contains(owner)
     }
     
     private func commands(
@@ -93,6 +112,7 @@ extension RegulatoryCoreLicensePlugin: XcodeBuildToolPlugin {
             }
         }
         var packages: [String: PackageInput] = [:]
+        var knownDirectories = Set<URL>()
         var extraInputs: [URL] = []
         // Xcode's workspace state also includes packages containing only binary targets.
         if let state = workspaceState(near: [context.pluginWorkDirectoryURL] + roots.sorted(by: { $0.path < $1.path })) {
@@ -108,6 +128,8 @@ extension RegulatoryCoreLicensePlugin: XcodeBuildToolPlugin {
                     directory = state.deletingLastPathComponent()
                         .appendingPathComponent(folder).appendingPathComponent(dependency.subpath)
                 }
+                knownDirectories.insert(directory.resolvingSymlinksInPath())
+                guard !isExcludedRepository(reference.location) else { continue }
                 packages[reference.identity] = .init(
                     id: reference.identity,
                     name: packageName(in: directory, fallback: reference.name ?? reference.identity),
@@ -115,10 +137,8 @@ extension RegulatoryCoreLicensePlugin: XcodeBuildToolPlugin {
                 )
             }
         }
-        let knownDirectories = Set(packages.values.map {
-            URL(fileURLWithPath: $0.directory).resolvingSymlinksInPath()
-        })
         for root in roots where !knownDirectories.contains(root.resolvingSymlinksInPath()) {
+            guard !isExcludedCheckout(root) else { continue }
             let id = root.lastPathComponent.lowercased()
             packages[id] = .init(id: id, name: packageName(in: root, fallback: root.lastPathComponent), directory: root.path)
         }
@@ -128,6 +148,28 @@ extension RegulatoryCoreLicensePlugin: XcodeBuildToolPlugin {
             workDirectory: context.pluginWorkDirectoryURL,
             extraInputs: extraInputs
         )
+    }
+    
+    private func isExcludedCheckout(_ directory: URL) -> Bool {
+        guard let config = try? String(
+            contentsOf: directory.appendingPathComponent(".git/config"),
+            encoding: .utf8
+        ) else {
+            return false
+        }
+        var isOrigin = false
+        for line in config.components(separatedBy: .newlines) {
+            let line = line.trimmingCharacters(in: .whitespaces)
+            if line.hasPrefix("[") {
+                isOrigin = line == "[remote \"origin\"]"
+            } else if isOrigin {
+                let parts = line.split(separator: "=", maxSplits: 1)
+                if parts.count == 2, parts[0].trimmingCharacters(in: .whitespaces) == "url" {
+                    return isExcludedRepository(String(parts[1]))
+                }
+            }
+        }
+        return false
     }
     
     private func packageRoot(containing directory: URL) -> URL? {

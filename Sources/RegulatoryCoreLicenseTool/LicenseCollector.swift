@@ -65,7 +65,7 @@ internal enum LicenseCollector {
                 .trimmingCharacters(in: .whitespaces.union(.init(charactersIn: "*/>")))
         }
         let text = content.lowercased().replacingOccurrences(of: #"\s+"#, with: " ", options: .regularExpression)
-        if text.contains("permission is hereby granted, free of charge"), text.contains("software") { return "MIT" }
+        if text.contains("permission is hereby granted, free of charge"), text.contains("software") { return "MIT License" }
         if text.contains("apache license"), text.contains("version 2.0") { return "Apache-2.0" }
         if text.contains("mozilla public license"), text.contains("2.0") { return "MPL-2.0" }
         for (title, prefix) in [("gnu affero general public license", "AGPL"), ("gnu lesser general public license", "LGPL"), ("gnu general public license", "GPL")] {
