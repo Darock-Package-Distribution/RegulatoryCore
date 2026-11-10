@@ -37,7 +37,7 @@ internal final class LicenseTests: XCTestCase {
             .init(id: "a-licensed", name: "Licensed", directory: licensed.path)
         ])
         XCTAssertEqual(licenses.map(\.id), ["a-licensed", "z-missing"])
-        XCTAssertEqual(licenses[0].licenseName, "Apache-2.0 / MIT")
+        XCTAssertEqual(licenses[0].licenseName, "Apache-2.0 / MIT License")
         XCTAssertTrue(licenses[0].licenseContent.contains("LICENSE-MIT"))
         XCTAssertTrue(licenses[0].licenseContent.contains("Version 2.0"))
         XCTAssertNil(licenses[1].licenseName)
@@ -55,6 +55,25 @@ internal final class LicenseTests: XCTestCase {
         XCTAssertFalse(licenses[0].licenseContent.contains("Other text"))
         XCTAssertNil(LicenseCollector.identify("Custom terms"))
         XCTAssertEqual(LicenseCollector.identify("Redistribution and use in source and binary forms. Neither the name"), "BSD-3-Clause")
+    }
+    
+    internal func testSkipsLocalPackagesWithoutLicenseFiles() throws {
+        let directory = try temporaryDirectory()
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let local = PackageInput(id: "local", name: "Local", directory: directory.path, isLocal: true)
+        let remote = PackageInput(id: "remote", name: "Remote", directory: directory.path)
+        XCTAssertEqual(try LicenseCollector.collect([local, remote]).map(\.id), ["remote"])
+        try "# License\nSPDX-License-Identifier: MIT".write(
+            to: directory.appendingPathComponent("README.md"),
+            atomically: true,
+            encoding: .utf8
+        )
+        XCTAssertEqual(try LicenseCollector.collect([local]), [])
+        let license = directory.appendingPathComponent("LICENSE.md")
+        try "SPDX-License-Identifier: MIT".write(to: license, atomically: true, encoding: .utf8)
+        XCTAssertEqual(try LicenseCollector.collect([local]).first?.licenseName, "MIT")
+        try FileManager.default.removeItem(at: license)
+        XCTAssertEqual(try LicenseCollector.collect([local]), [])
     }
     
     private func temporaryDirectory() throws -> URL {

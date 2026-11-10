@@ -15,10 +15,17 @@ internal struct RegulatoryCoreLicensePlugin: BuildToolPlugin {
             if case .repository(let url, _, _) = package.origin, isExcludedRepository(url) {
                 return
             }
+            let isLocal: Bool
+            if case .local = package.origin {
+                isLocal = true
+            } else {
+                isLocal = false
+            }
             packages[package.id] = .init(
                 id: package.id,
                 name: package.displayName,
-                directory: package.directoryURL.path
+                directory: package.directoryURL.path,
+                isLocal: isLocal
             )
         }
         context.package.dependencies.forEach { visit($0.package) }
@@ -87,6 +94,7 @@ internal struct RegulatoryCoreLicensePlugin: BuildToolPlugin {
         internal let id: String
         internal let name: String
         internal let directory: String
+        internal let isLocal: Bool
     }
 }
 
@@ -133,14 +141,20 @@ extension RegulatoryCoreLicensePlugin: XcodeBuildToolPlugin {
                 packages[reference.identity] = .init(
                     id: reference.identity,
                     name: packageName(in: directory, fallback: reference.name ?? reference.identity),
-                    directory: directory.path
+                    directory: directory.path,
+                    isLocal: reference.kind == "fileSystem"
                 )
             }
         }
         for root in roots where !knownDirectories.contains(root.resolvingSymlinksInPath()) {
             guard !isExcludedCheckout(root) else { continue }
             let id = root.lastPathComponent.lowercased()
-            packages[id] = .init(id: id, name: packageName(in: root, fallback: root.lastPathComponent), directory: root.path)
+            packages[id] = .init(
+                id: id,
+                name: packageName(in: root, fallback: root.lastPathComponent),
+                directory: root.path,
+                isLocal: true
+            )
         }
         return try commands(
             packages: Array(packages.values),

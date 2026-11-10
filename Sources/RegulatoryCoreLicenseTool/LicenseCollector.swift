@@ -4,13 +4,15 @@ internal struct PackageInput: Codable {
     internal let id: String
     internal let name: String
     internal let directory: String
+    internal var isLocal = false
 }
 
 internal enum LicenseCollector {
     internal static func collect(_ packages: [PackageInput]) throws -> [LRCPackageLicense] {
-        try packages.sorted { $0.id < $1.id }.map { package in
+        try packages.sorted { $0.id < $1.id }.compactMap { package -> LRCPackageLicense? in
             let root = URL(fileURLWithPath: package.directory)
             let files = try licenseFiles(in: root)
+            guard !package.isLocal || !files.isEmpty else { return nil }
             var contents = try files.map { url in
                 let content = try String(contentsOf: url, encoding: .utf8)
                 return (url.lastPathComponent, content)
