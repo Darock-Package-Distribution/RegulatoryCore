@@ -10,7 +10,7 @@ let package = Package(
         .plugin(name: "RegulatoryCoreLicensePlugin", targets: ["RegulatoryCoreLicensePlugin"]),
     ],
     targets: [
-        .binaryTarget(name: "RegulatoryCore", url: "https://github.com/darock-package-distribution/regulatorycore/releases/download/1.0.2/RegulatoryCore.xcframework.zip", checksum: "53004b72c87fab5ab066c1654acd9dd2360c558e1862febd843bcce9673d1066"),
+        .binaryTarget(name: "RegulatoryCore", url: "https://github.com/darock-package-distribution/regulatorycore/releases/download/1.0.3/RegulatoryCore.xcframework.zip", checksum: "c65ba073be7061d46e811a04b8741170e9395488c88bd86830a9a59daf3cf80f"),
         .executableTarget(name: "RegulatoryCoreLicenseTool"),
         .plugin(
             name: "RegulatoryCoreLicensePlugin",
