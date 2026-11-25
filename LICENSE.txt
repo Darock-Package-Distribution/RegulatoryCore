@@ -1,0 +1,184 @@
+Darock Closed-Source Library License
+
+Copyright (c) Darock Studio. All rights reserved.
+
+1. Scope and Grant of License
+
+For the purposes of this License, the "Library" means the software library
+made available by Darock Studio under this License, including its source
+code, if provided, compiled binaries, and accompanying materials.
+
+The term "Library" also includes any supplementary files, binary artifacts,
+resources, and other components made available by Darock Studio for use
+with the Library, whether distributed together with the Library or obtained
+separately through URLs, package managers, build systems, or other means.
+
+Such materials are subject to all applicable terms and conditions of this
+License regardless of their storage location, delivery mechanism, or
+whether they are retrieved manually or automatically, unless expressly
+licensed otherwise by Darock Studio.
+
+Subject to the terms and conditions of this License, Darock Studio grants
+any person or entity obtaining a copy of the Library a worldwide,
+royalty-free, non-exclusive license to use, copy, link to, integrate, and
+distribute the Library as an integral component of other software, for any
+purpose, whether commercial or non-commercial, and whether such software
+is proprietary or open source.
+
+This License does not require the disclosure or licensing of the source code
+of software that uses the Library. Such software may be distributed under
+terms of the distributor's choice, provided that those terms do not alter,
+replace, or supersede this License as it applies to the Library itself.
+
+2. Copyright and License Notices
+
+The copyright notice identifying Darock Studio and the complete, unmodified
+text of this License must be retained and reproduced in all distributed
+copies of the Library and in all software distributed with or incorporating
+the Library, subject to the following requirements:
+
+(a) When distributing the source code of software that uses or incorporates
+    the Library, the copyright notice and the full text of this License must
+    be included in the distributed source tree and in its source code
+    repository, if one is made available.
+
+(b) When distributing the Library as part of another software library,
+    framework, or software development kit, the copyright notice and the
+    full text of this License must be included within the distributed
+    package's file structure in a readily accessible license or notice file.
+
+(c) When distributing executable software that incorporates or is bundled
+    with the Library, the copyright notice and the full text of this License
+    must be made readily accessible to end users in a user-visible form,
+    such as an About screen, a third-party license screen, a command-line
+    license option, or a clearly identified license notice accompanying
+    the executable software.
+
+These requirements are cumulative where more than one form of distribution
+applies. A link to an external copy of this License alone is not sufficient.
+No copyright, license, or other proprietary notice included with the Library
+may be removed, altered, or obscured.
+
+3. Restrictions on Modification and Reverse Engineering
+
+The Library is licensed for use in its original, unmodified form only.
+Except to the extent that applicable law expressly permits such conduct
+notwithstanding contractual restrictions, you may not, directly or
+indirectly:
+
+(a) Modify, adapt, translate, patch, or otherwise alter the Library, whether
+    in source code, object code, binary, or any other form, or create
+    derivative works of the Library itself.
+
+(b) Reverse engineer, decompile, disassemble, or otherwise attempt to
+    reconstruct, extract, or discover the underlying source code or
+    non-public implementation of the Library.
+
+(c) Circumvent or remove any technical protection mechanism implemented
+    in or for the Library.
+
+Ordinary linking, including static or dynamic linking, and the use of the
+Library through its interfaces are permitted. Linking, copying, and
+packaging the Library without altering its implementation do not, by
+themselves, constitute prohibited modification under this License.
+
+4. Restrictions on Redistribution
+
+The Library may be redistributed only as an integral component of other
+software that provides independent functionality beyond merely making the
+Library available for use or redistribution.
+
+You may not redistribute, republish, mirror, resell, or otherwise make the
+Library available as a standalone product or package, whether for a fee or
+free of charge. This prohibition applies even when the Library is distributed
+in its original, unmodified form or merely repackaged under a different name
+or distribution format.
+
+You may not distribute the Library under a different license or grant any
+rights in the Library beyond those expressly granted by this License. Each
+recipient of a lawfully distributed copy of the Library receives a license
+from Darock Studio directly under these terms.
+
+5. Ownership and Trademarks
+
+The Library is licensed, not sold. All intellectual property rights in the
+Library remain with Darock Studio or its respective licensors. All rights
+not expressly granted under this License are reserved.
+
+This License grants no right to use the Darock or Darock Studio names,
+logos, trademarks, service marks, or other brand identifiers as trademarks
+or branding for any product or service, or in any manner that implies
+sponsorship, affiliation, endorsement, or approval by Darock Studio.
+This restriction does not prohibit the required copyright and license
+notices or truthful identification of the Library as a dependency.
+
+6. Network Services and Acceptable Use
+
+The Library may access or communicate with network services, servers,
+application programming interfaces (APIs), or other network infrastructure
+operated by or on behalf of Darock Studio (collectively, the "Services").
+
+In connection with the use of the Library or the Services, you may not,
+directly or indirectly:
+
+(a) Engage in denial-of-service (DoS) or distributed denial-of-service
+    (DDoS) attacks, or intentionally overload, disrupt, or impair the
+    operation or availability of the Services.
+
+(b) Access or attempt to access systems, accounts, or data without
+    authorization, or circumvent authentication, access controls, rate
+    limits, or other security or usage restrictions.
+
+(c) Exploit vulnerabilities or otherwise misuse the Services in a manner
+    that compromises or threatens their security, integrity, or
+    availability.
+
+(d) Knowingly facilitate, assist, or enable any of the prohibited conduct
+    described in this Section.
+
+Darock Studio reserves the right to restrict, suspend, or terminate access
+to the Services in response to violations of this Section. Nothing in this
+License obligates Darock Studio to provide, maintain, or continue to make
+any of the Services available.
+
+7. Disclaimer of Warranty
+
+THE LIBRARY AND THE SERVICES ARE PROVIDED "AS IS" AND "AS AVAILABLE",
+WITHOUT WARRANTY OF ANY KIND, EXPRESS, IMPLIED, OR STATUTORY, INCLUDING
+BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE, TITLE, ACCURACY, AND NON-INFRINGEMENT. DAROCK STUDIO MAKES NO WARRANTY
+THAT THE LIBRARY OR THE SERVICES WILL BE ERROR-FREE, SECURE, UNINTERRUPTED,
+OR SUITABLE FOR ANY PARTICULAR USE. THE ENTIRE RISK ARISING OUT OF THE USE
+OR PERFORMANCE OF THE LIBRARY OR THE SERVICES REMAINS WITH YOU, TO THE
+MAXIMUM EXTENT PERMITTED BY LAW.
+
+8. Limitation of Liability
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL
+DAROCK STUDIO, ITS CONTRIBUTORS, OR ITS LICENSORS BE LIABLE FOR ANY
+CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE
+LIBRARY OR THE SERVICES, OR ANY USE OF OR OTHER DEALINGS IN THE LIBRARY
+OR THE SERVICES, INCLUDING ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, LOSS OF PROFITS, LOSS OF DATA,
+OR BUSINESS INTERRUPTION, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+9. Termination
+
+Your rights under this License terminate automatically if you fail to comply
+with its terms. Upon termination, you must cease all use and distribution of
+the Library and delete or destroy all copies of the Library in your possession
+or control, except to the extent retention is required by applicable law.
+
+Termination does not affect the rights of recipients who have lawfully
+received the Library from you and remain in compliance with this License.
+Provisions concerning ownership, trademarks, warranty, liability, and any
+other provisions that by their nature survive termination remain in effect.
+
+10. Severability
+
+If any provision of this License is held to be invalid or unenforceable,
+that provision shall be enforced to the maximum extent permitted by law,
+and the remaining provisions shall continue in full force and effect.
+Nothing in this License excludes or limits any rights or liabilities that
+cannot lawfully be excluded or limited.
